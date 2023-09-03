@@ -1,4 +1,4 @@
-package com.yuren.apipassenger.request;
+package com.yuren.internalcommon.request;
 
 import lombok.Data;
 

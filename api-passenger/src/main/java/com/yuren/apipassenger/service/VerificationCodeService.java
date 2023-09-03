@@ -2,12 +2,18 @@ package com.yuren.apipassenger.service;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.yuren.apipassenger.client.ServicePassengerUserClient;
 import com.yuren.apipassenger.client.ServiceVerificationCodeClient;
 import com.yuren.internalcommon.constant.CommonConstant;
 import com.yuren.internalcommon.constant.CommonStatusConstant;
+import com.yuren.internalcommon.constant.IdentityConstant;
+import com.yuren.internalcommon.constant.TokenConfigConstant;
 import com.yuren.internalcommon.dto.NumberResponse;
+import com.yuren.internalcommon.request.VerificationCodeDTO;
 import com.yuren.internalcommon.response.ResponseResult;
 import com.yuren.internalcommon.response.TokenResponse;
+import com.yuren.internalcommon.util.JWTUtils;
+import com.yuren.internalcommon.util.RedisPrefixUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -28,9 +34,10 @@ public class VerificationCodeService {
     private ServiceVerificationCodeClient serviceVerificationCodeClient;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private ServicePassengerUserClient servicePassengerUserClient;
 
-    private String verificationcodeRedisPre = "passenger-verification-code-";
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 发送验证码
@@ -47,8 +54,8 @@ public class VerificationCodeService {
         log.info("获取验证码：{}", code);
 
         // 将验证码存储到redis中
-        String key = verificationcodeRedisPre + passengerPhone;
-        redisTemplate.opsForValue().set(key, code.toString(), 2, TimeUnit.MINUTES);
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
+        stringRedisTemplate.opsForValue().set(key, code.toString(), 2, TimeUnit.MINUTES);
         log.info("将验证码存储到redis中");
 
         //todo 通过调用消息中间件发送短信
@@ -65,9 +72,9 @@ public class VerificationCodeService {
      * @return
      */
     public ResponseResult checkVerificationCode(String passengerPhone, String verificationCode) {
-        String key = verificationcodeRedisPre + passengerPhone;
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
         // todo 此处要增加一个删除逻辑，避免并发操作，可以采用lua脚本进行执行
-        String code = redisTemplate.opsForValue().get(key);
+        String code = stringRedisTemplate.opsForValue().get(key);
         log.info("获取验证码：{}", code);
 
         if (StringUtils.isBlank(code)) {
@@ -83,10 +90,27 @@ public class VerificationCodeService {
 
 
         log.info("判断用户是否存在，做出相对应的措施");
+        VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
+        verificationCodeDTO.setPassengerPhone(passengerPhone);
+        servicePassengerUserClient.loginOrRegister(verificationCodeDTO);
 
+
+        String accessToken = JWTUtils.generatorToken(passengerPhone, IdentityConstant.IDENTITY_PASSENGER, TokenConfigConstant.ACCESS_TOKEN_KEY);
+        String refreshToken = JWTUtils.generatorToken(passengerPhone, IdentityConstant.IDENTITY_PASSENGER, TokenConfigConstant.REFRESH_TOKEN_KEY);
+        log.info("生成accessToken:{}",accessToken);
+        log.info("生成refreshToken:{}",refreshToken);
+
+        log.info("将token存储到redis中");
+        String accessTokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.IDENTITY_PASSENGER, TokenConfigConstant.ACCESS_TOKEN_KEY);
+        String refreshTokenKey = RedisPrefixUtils.generatorTokenKey(passengerPhone, IdentityConstant.IDENTITY_PASSENGER, TokenConfigConstant.REFRESH_TOKEN_KEY);
+        stringRedisTemplate.opsForValue().set(accessTokenKey, accessToken, 30 , TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 31 , TimeUnit.DAYS);
+
+        log.info("返回token");
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken("token value");
-        log.info("生成token并返回");
+        tokenResponse.setAccessToken(accessToken);
+        tokenResponse.setRefreshToken(refreshToken);
+
 
         return ResponseResult.success(tokenResponse);
     }

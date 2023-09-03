@@ -43,6 +43,10 @@ public class ResponseResult<T> {
     }
 
 
+    public static<T> ResponseResult responseResult(Integer code, String message) {
+        return responseResult(code, message, null);
+    }
+
 
     public static<T> ResponseResult responseResult(Integer code, String message, T data) {
         return new ResponseResult().setCode(code).setMessage(message).setData(data);

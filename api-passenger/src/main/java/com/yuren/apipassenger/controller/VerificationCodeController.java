@@ -1,6 +1,6 @@
 package com.yuren.apipassenger.controller;
 
-import com.yuren.apipassenger.request.VerificationCodeDTO;
+import com.yuren.internalcommon.request.VerificationCodeDTO;
 import com.yuren.apipassenger.service.VerificationCodeService;
 import com.yuren.internalcommon.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;

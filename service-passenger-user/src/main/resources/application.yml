@@ -5,7 +5,18 @@ spring:
   application:
     name: service-passenger-user
 
+
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/service-passenger-user?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+
+mybatis-plus:
+  configuration:
+    # 开启sql日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
