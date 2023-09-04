@@ -33,7 +33,7 @@ public class ForecastPriceController {
         log.info("终点经度：{}", destLatitude);
         log.info("终点纬度：{}", destLongitude);
 
-        return forecastPriceService.forecastPrice(depLatitude, depLongitude, destLatitude, destLongitude);
+        return forecastPriceService.forecastPrice(depLongitude,depLatitude,destLongitude,destLatitude);
 
     }
 }

@@ -20,7 +20,7 @@ public class ForecastPriceService {
      * @param destLongitude 终点纬度
      * @return
      */
-    public ResponseResult forecastPrice(String depLatitude, String depLongitude, String destLatitude, String destLongitude) {
+    public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
 
         PriceResponse priceResponse = new PriceResponse();
         priceResponse.setPrice(12.23);
