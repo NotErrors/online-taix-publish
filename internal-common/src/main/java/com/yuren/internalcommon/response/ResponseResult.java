@@ -33,6 +33,10 @@ public class ResponseResult<T> {
         return fail(CommonStatusConstant.FAIL.getMessage());
     }
 
+    public static ResponseResult fail(Integer code, String message) {
+        return responseResult(code, message);
+    }
+
     public static ResponseResult fail(String mesage) {
         return fail(mesage, null);
     }
@@ -41,6 +45,7 @@ public class ResponseResult<T> {
         return responseResult(CommonStatusConstant.FAIL.getCode(), mesage,
                 data);
     }
+
 
 
     public static<T> ResponseResult responseResult(Integer code, String message) {

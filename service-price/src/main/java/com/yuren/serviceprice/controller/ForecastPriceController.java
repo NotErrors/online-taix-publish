@@ -1,6 +1,7 @@
 package com.yuren.serviceprice.controller;
 
 import com.yuren.internalcommon.request.ForecastPriceDTO;
+import com.yuren.internalcommon.response.PriceResponse;
 import com.yuren.internalcommon.response.ResponseResult;
 import com.yuren.serviceprice.service.ForecastPriceService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class ForecastPriceController {
     private ForecastPriceService forecastPriceService;
 
     @PostMapping("/forecast-price")
-    public ResponseResult forecastPrice(@RequestBody ForecastPriceDTO forecastPriceDTO) {
+    public ResponseResult<PriceResponse> forecastPrice(@RequestBody ForecastPriceDTO forecastPriceDTO) {
         String depLatitude = forecastPriceDTO.getDepLatitude();
         String depLongitude = forecastPriceDTO.getDepLongitude();
         String destLatitude = forecastPriceDTO.getDestLatitude();

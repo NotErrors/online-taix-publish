@@ -27,6 +27,16 @@ public enum  CommonStatusConstant {
      */
     USER_ERROR_EXIST(1201, "该用户不存在"),
 
+    /**
+     * 计价提示： 1300-1399
+     */
+    PRICE_RULE_EXIST(1300, "计价规则不存在"),
+
+    /**
+     * 行政地区提示： 1400-1499
+     */
+    DIC_DISTRICT_EMPTY(1400, "行政地区信息不存在"),
+
     SUCCESS(1,"success"),
     FAIL(2,"fail");
 

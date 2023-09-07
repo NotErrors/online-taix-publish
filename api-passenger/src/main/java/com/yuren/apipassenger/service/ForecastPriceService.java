@@ -1,7 +1,10 @@
 package com.yuren.apipassenger.service;
 
+import com.yuren.apipassenger.client.ServicePriceClient;
+import com.yuren.internalcommon.request.ForecastPriceDTO;
 import com.yuren.internalcommon.response.PriceResponse;
 import com.yuren.internalcommon.response.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +14,9 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class ForecastPriceService {
+
+    @Autowired
+    private ServicePriceClient servicePriceClient;
 
     /**
      * 计算起点到终点的经纬度
@@ -22,8 +28,13 @@ public class ForecastPriceService {
      */
     public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
 
-        PriceResponse priceResponse = new PriceResponse();
-        priceResponse.setPrice(12.23);
-        return ResponseResult.success(priceResponse);
+        ForecastPriceDTO forecastPriceDTO = new ForecastPriceDTO();
+        forecastPriceDTO.setDepLongitude(depLongitude);
+        forecastPriceDTO.setDepLatitude(depLatitude);
+        forecastPriceDTO.setDestLongitude(destLongitude);
+        forecastPriceDTO.setDestLatitude(destLatitude);
+
+        ResponseResult<PriceResponse> priceResponseResponseResult = servicePriceClient.forecastPrice(forecastPriceDTO);
+        return ResponseResult.success(priceResponseResponseResult.getData());
     }
 }
