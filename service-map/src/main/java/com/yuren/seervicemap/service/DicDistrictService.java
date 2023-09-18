@@ -1,5 +1,6 @@
 package com.yuren.seervicemap.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yuren.internalcommon.constant.AMapConfigConstant;
 import com.yuren.internalcommon.constant.CommonStatusConstant;
@@ -40,7 +41,9 @@ public class DicDistrictService {
         JSONObject disDistrictJSONObject = JSONObject.parseObject(dicDistrictResult);
         int status = disDistrictJSONObject.getIntValue(AMapConfigConstant.STATUS);
         if (status == 1) {
-            DicDistrictInfo districtInfo = disDistrictJSONObject.getObject(AMapConfigConstant.DISTRICTS, DicDistrictInfo.class);
+            JSONArray jsonArray = disDistrictJSONObject.getJSONArray(AMapConfigConstant.DISTRICTS);
+            DicDistrictInfo districtInfo = jsonArray.getObject(0, DicDistrictInfo.class);
+//            DicDistrictInfo districtInfo = disDistrictJSONObject.getObject(AMapConfigConstant.DISTRICTS, DicDistrictInfo.class);
 
             // 存储到数据库中
             if (districtInfo != null) {

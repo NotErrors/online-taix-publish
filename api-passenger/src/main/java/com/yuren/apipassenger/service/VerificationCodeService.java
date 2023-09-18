@@ -54,7 +54,7 @@ public class VerificationCodeService {
         log.info("获取验证码：{}", code);
 
         // 将验证码存储到redis中
-        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone, IdentityConstant.IDENTITY_PASSENGER);
         stringRedisTemplate.opsForValue().set(key, code.toString(), 2, TimeUnit.MINUTES);
         log.info("将验证码存储到redis中");
 
@@ -72,7 +72,7 @@ public class VerificationCodeService {
      * @return
      */
     public ResponseResult checkVerificationCode(String passengerPhone, String verificationCode) {
-        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone);
+        String key = RedisPrefixUtils.generatorKeyByPhone(passengerPhone, IdentityConstant.IDENTITY_PASSENGER);
         // todo 此处要增加一个删除逻辑，避免并发操作，可以采用lua脚本进行执行
         String code = stringRedisTemplate.opsForValue().get(key);
         log.info("获取验证码：{}", code);

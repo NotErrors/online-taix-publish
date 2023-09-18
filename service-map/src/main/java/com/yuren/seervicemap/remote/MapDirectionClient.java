@@ -55,8 +55,8 @@ public class MapDirectionClient {
         log.info("高德请求后返回的路径规划结果：{}", directionString);
 
         // 解析返回结果
+        DirectionResponse response = parseDirectionString(directionString);
 
-        DirectionResponse response = new DirectionResponse();
         return response;
     }
 
@@ -85,7 +85,7 @@ public class MapDirectionClient {
                 }
             }
         }catch (Exception e) {
-
+            log.info(e.getMessage());
         }
         return directionResponse;
     }

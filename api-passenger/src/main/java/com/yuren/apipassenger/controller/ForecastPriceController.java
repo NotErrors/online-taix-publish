@@ -27,13 +27,17 @@ public class ForecastPriceController {
         String depLongitude = forecastPriceDTO.getDepLongitude();
         String destLatitude = forecastPriceDTO.getDestLatitude();
         String destLongitude = forecastPriceDTO.getDestLongitude();
+        String cityCode = forecastPriceDTO.getCityCode();
+        String vehicleType = forecastPriceDTO.getVehicleType();
 
         log.info("起点经度：{}", depLatitude);
         log.info("起点纬度：{}", depLongitude);
         log.info("终点经度：{}", destLatitude);
         log.info("终点纬度：{}", destLongitude);
+        log.info("城市编码：{}", cityCode);
+        log.info("车辆类型：{}", vehicleType);
 
-        return forecastPriceService.forecastPrice(depLongitude,depLatitude,destLongitude,destLatitude);
+        return forecastPriceService.forecastPrice(depLongitude,depLatitude,destLongitude,destLatitude,cityCode,vehicleType);
 
     }
 }

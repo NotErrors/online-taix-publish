@@ -1,5 +1,6 @@
 package com.yuren.serviceprice.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuren.internalcommon.constant.CommonStatusConstant;
 import com.yuren.internalcommon.dto.PriceRule;
 import com.yuren.internalcommon.request.ForecastPriceDTO;
@@ -40,7 +41,7 @@ public class ForecastPriceService {
      * @param destLongitude 终点经度
      * @return
      */
-    public ResponseResult<PriceResponse> forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+    public ResponseResult<PriceResponse> forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude, String cityCode, String vehicleType) {
 
         // 重新封装ForecastPriceDTO，是因为参数可能这中途需要进行计算等其他原因
         // 故controller层将参数进行拆分，然后在要请求时进行封装
@@ -49,13 +50,20 @@ public class ForecastPriceService {
         forecastPriceDTO.setDepLatitude(depLatitude);
         forecastPriceDTO.setDestLongitude(destLongitude);
         forecastPriceDTO.setDestLatitude(destLatitude);
+        forecastPriceDTO.setCityCode(cityCode);
+        forecastPriceDTO.setVehicleType(vehicleType);
         ResponseResult<DirectionResponse> responseResult = serviceMapClient.driving(forecastPriceDTO);
         DirectionResponse data = responseResult.getData();
         // 获取计价规则
-        Map<String,Object> queryMap = new HashMap<>();
-        queryMap.put("city_code", null);
-        queryMap.put("vehicle_type", null);
-        List<PriceRule> priceRuleList = priceRuleMapper.selectByMap(queryMap);
+//        Map<String,Object> queryMap = new HashMap<>();
+//        queryMap.put("city_code", null);
+//        queryMap.put("vehicle_type", null);
+
+        QueryWrapper<PriceRule> wrapper = new QueryWrapper<>();
+        wrapper.eq("city_code", cityCode);
+        wrapper.eq("vehicle_type", vehicleType);
+        wrapper.orderByDesc("fare_version");
+        List<PriceRule> priceRuleList = priceRuleMapper.selectList(wrapper);
         if (priceRuleList.isEmpty()) {
             return ResponseResult.fail(CommonStatusConstant.PRICE_RULE_EXIST.getCode(), CommonStatusConstant.PRICE_RULE_EXIST.getMessage());
         }
@@ -64,6 +72,10 @@ public class ForecastPriceService {
 
         PriceResponse priceResponse = new PriceResponse();
         priceResponse.setPrice(price);
+        priceResponse.setCityCode(cityCode);
+        priceResponse.setVehicleType(vehicleType);
+        priceResponse.setFareType(priceRule.getFareType());
+        priceResponse.setFareVersion(priceResponse.getFareVersion());
         return ResponseResult.success(priceResponse);
     }
 

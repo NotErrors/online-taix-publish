@@ -11,4 +11,12 @@ import lombok.Data;
 public class PriceResponse {
 
     private double price ;
+
+    private String cityCode;
+
+    private String vehicleType;
+
+    private String fareType;
+
+    private Integer fareVersion;
 }

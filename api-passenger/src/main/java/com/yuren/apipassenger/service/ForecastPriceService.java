@@ -26,13 +26,15 @@ public class ForecastPriceService {
      * @param destLongitude 终点纬度
      * @return
      */
-    public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
+    public ResponseResult forecastPrice(String depLongitude, String depLatitude, String destLongitude, String destLatitude, String cityCode, String vehicleType) {
 
         ForecastPriceDTO forecastPriceDTO = new ForecastPriceDTO();
         forecastPriceDTO.setDepLongitude(depLongitude);
         forecastPriceDTO.setDepLatitude(depLatitude);
         forecastPriceDTO.setDestLongitude(destLongitude);
         forecastPriceDTO.setDestLatitude(destLatitude);
+        forecastPriceDTO.setCityCode(cityCode);
+        forecastPriceDTO.setVehicleType(vehicleType);
 
         ResponseResult<PriceResponse> priceResponseResponseResult = servicePriceClient.forecastPrice(forecastPriceDTO);
         return ResponseResult.success(priceResponseResponseResult.getData());

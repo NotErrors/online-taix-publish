@@ -21,4 +21,6 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 amap:
-  key: dsadasdasdsadasdasdsa
+  key: 41ed8256d4487b82fe3f312a5529f4cd
+  # 服务id
+  sid: 1005373

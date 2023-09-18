@@ -8,19 +8,23 @@ package com.yuren.internalcommon.util;
 public class RedisPrefixUtils {
 
 
-    private static String verificationcodeRedisPre = "passenger-verification-code-";
+    private static String verificationcodeRedisPre = "verification-code-";
 
     private static String tokenRedisPre = "token-";
+
+    private static String deviceCodeKeyPre = "black-device-";
 
 
     public static String generatorTokenKey(String passengerPhone, String identity, String tokenType) {
         return tokenRedisPre + passengerPhone + "-" + identity + "-" + tokenType;
     }
 
-    public static String generatorKeyByPhone(String passengerPhone) {
-        return verificationcodeRedisPre + passengerPhone ;
+    public static String generatorKeyByPhone(String passengerPhone, String identity) {
+        return verificationcodeRedisPre + identity + "-"  +passengerPhone ;
     }
 
 
-
+    public static String generatorDeviceCodeKey(String deviceCode) {
+        return deviceCodeKeyPre + deviceCode;
+    }
 }

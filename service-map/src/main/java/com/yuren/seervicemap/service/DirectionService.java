@@ -27,12 +27,8 @@ public class DirectionService {
      */
     public ResponseResult driving(String depLongitude, String depLatitude, String destLongitude, String destLatitude) {
 
-        mapDirectionClient.direction(depLongitude, depLatitude, destLongitude, destLatitude);
+        DirectionResponse direction = mapDirectionClient.direction(depLongitude, depLatitude, destLongitude, destLatitude);
 
-        DirectionResponse directionResponse = new DirectionResponse();
-        directionResponse.setDistance(123);
-        directionResponse.setDuration(456);
-
-        return ResponseResult.success(directionResponse);
+        return ResponseResult.success(direction);
     }
 }

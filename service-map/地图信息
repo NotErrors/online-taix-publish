@@ -1,0 +1,75 @@
+服务创建信息
+{
+    "errcode": 10000,
+    "errmsg": "OK",
+    "data": {
+        "name": "愚人出行",
+        "sid": 1005373
+    }
+}
+
+
+终端创建信息
+{
+    "errcode": 10000,
+    "errmsg": "OK",
+    "data": {
+        "name": "愚人1号",
+        "tid": 754882167,
+        "sid": 1005373
+    }
+}
+
+轨迹创建信息
+{
+    "errcode": 10000,
+    "errmsg": "OK",
+    "data": {
+        "trid": 20
+    }
+}
+
+上传轨迹点
+
+## 参数错误
+{
+    "errcode": 20100,
+    "errmsg": "OK",
+    "errdetail": "PARTIAL_SUCCESS",
+    "data": {
+        "errorpoints": [
+            {
+                "_param_err_info": "locatetime",
+                "_err_point_index": 0,
+                "localtion": "113.549909,23.141268",
+                "locateTime": "1694441406714"
+            }
+        ]
+    }
+}
+
+
+搜索周边
+{
+    "errcode": 10000,
+    "errmsg": "OK",
+    "data": {
+        "results": [
+            {
+                "tid": 754882167,
+                "name": "愚人1号",
+                "createtime": 1694440104233,
+                "locatetime": 1694441406714,
+                "location": {
+                    "latitude": 23.151268,
+                    "longitude": 113.559909,
+                    "speed": 255.0,
+                    "direction": 511.0,
+                    "accuracy": 550.0,
+                    "distance": 7
+                }
+            }
+        ],
+        "count": 1
+    }
+}
